@@ -40,7 +40,7 @@ logger = logging.getLogger()
 
 
 @bot.on_message(filters.command(["start"]))
- async def start(bot, update):
+async def start(bot, update):
     await update.reply_text("𝕳𝖎 𝖎 𝖆𝖒 **𝕮𝖆𝖗𝖊𝖊𝖗𝖜𝖎𝖑𝖑 𝕯𝖔𝖜𝖓𝖑𝖔𝖆𝖉𝖊𝖗**.\n\n"
                             "**𝒩𝒪𝒲:-̄** "
 
