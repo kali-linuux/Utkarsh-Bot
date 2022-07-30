@@ -38,16 +38,8 @@ bot = Client("CW", bot_token=os.environ.get("BOT_TOKEN"), api_id=int(os.environ.
 
 logger = logging.getLogger()
 
-
 @bot.on_message(filters.command(["start"]))
-async def start(bot, update):
-    await update.reply_text("𝕳𝖎 𝖎 𝖆𝖒 **𝕮𝖆𝖗𝖊𝖊𝖗𝖜𝖎𝖑𝖑 𝕯𝖔𝖜𝖓𝖑𝖔𝖆𝖉𝖊𝖗**.\n\n"
-                            "**𝒩𝒪𝒲:-̄** "
 
-                            "ℙ𝕣𝕖𝕤𝕤 **/login** 𝕥𝕠 𝕔𝕠𝕟𝕥𝕚𝕟𝕦𝕖..\n\n"
-                            "Bᴏᴛ ᴍᴀᴅᴇ ʙʏ ** BʟᴀᴄᴋOᴜT **")
-
-logger = logging.getLogger()
 rwa_url = "https://rozgarapinew.teachx.in/post/login"
 
 hdr = {"Auth-Key": "appxapi",
