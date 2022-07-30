@@ -59,7 +59,7 @@ async def account_login(bot: Client, m: Message):
     data["password"] = raw_text.split("*")[1]
 
     res = requests.post(utk_url, data=data).json()
-    token = res["token"]
+    token = res["data"]["token"]
     await m.reply_text(token)
     hdr = {"X-Auth-Token": token}
     books_response = requests.post(utk_books_url, headers=hdr).json()
