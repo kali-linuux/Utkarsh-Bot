@@ -125,9 +125,6 @@ async def account_login(bot: Client, m: Message):
     b_data2 = res3.json()['data']
     await m.reply_text(b_data2)
 
-    await m.reply_text('Done')   
-
-       
-            
-
+    await m.reply_text('Done')
+bot.run()
 
