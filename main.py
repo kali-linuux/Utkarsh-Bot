@@ -93,7 +93,7 @@ async def account_login(bot: Client, m: Message):
     data["email"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
 
-    res = requests.post(https://rozgarapinew.teachx.in/post/login, data=data, headers=hdr).json()
+    res = requests.post("https://rozgarapinew.teachx.in/post/login", data=data, headers=hdr).json()
     for data res:
     await m.reply_text(data)
     userid = res["data"]["userid"]
