@@ -59,6 +59,8 @@ async def account_login(bot: Client, m: Message):
     data["password"] = raw_text.split("*")[1]
 
     res = requests.post(utk_url, data=data).json()
+    for data res:
+    await m.reply_text(data)
     token = res["data"]["token"]
     await m.reply_text(token)
     hdr = {"X-Auth-Token": token}
