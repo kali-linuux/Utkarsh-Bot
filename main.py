@@ -41,10 +41,20 @@ async def start(bot, update):
 
 logger = logging.getLogger()
 rwa_url = "https://rozgarapinew.teachx.in/post/login"
-cour_url =  "https://rozgarapinew.teachx.in/get/mycourse?userid="
-utk_book_url = "https://live-wsbook.e-utkarsh.com/metainfo/getAllChaptersMetaInfo?siteId=1&bookId={}"
 
-data = {"email":"","password":""}
+hdr = {"Auth-Key": "appxapi",
+       "User-Id": "-2",
+       "Authorization": "",
+       "User_app_category": "",
+       "Language": "en",
+       "Content-Type": "application/x-www-form-urlencoded",
+       "Content-Length": "227",
+       "Accept-Encoding": "gzip, deflate",
+       "User-Agent": "okhttp/4.9.1"
+       }
+
+data = {"email": "", "password": ""}
+res = requests.post(rwa_url, data=data, headers=hdr).json(
 cleanr = re.compile("<.*?>")
 os.makedirs("./htmls", exist_ok=True)
 
@@ -55,204 +65,50 @@ async def account_login(bot: Client, m: Message):
     
     input1: Message = await bot.listen(editable.chat.id)
     raw_text = input1.text
-    data["username"] = raw_text.split("*")[0]
+    data["email"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
 
-    res = requests.post(rwa_url, data=data).json()
+    res = requests.post(rwa_url, data=data, headers=hdr).json()
     for data res:
     await m.reply_text(data)
     userid = res["data"]["userid"]
     token = res["data"]["token"]
-    print(userid)
-    print(token)
-    hdr = {"Authorization": token,User-Id: userid}
-    mycourse_response = requests.post(cour_url+"userid", headers=hdr).json()
-    try:
-        books_dict = json.loads(mycourse_response["data"])
-    except:
-        exit()
+    hdr1 = {
+           "Host": "rozgarapinew.teachx.in",
+           "Client-Service": "Appx",
+           "Auth-Key": "appxapi",
+           "User-Id": userid,
+           "Authorization": token
+           }cour_url = "https://rozgarapinew.teachx.in/get/mycourse?userid="
 
-    main_books = {}
-    for book in books_dict:
-        if 'packageBookIds' in book and 'packageBookId' not in book:
-            main_books[book["id"]] = {"title": book["title"], "books": book["packageBookIds"]}
-        if 'packageBookIds' not in book and 'packageBookId' not in book:
-            main_books[book["id"]] = {"title": book["title"]}
+    res1 = requests.get("https://rozgarapinew.teachx.in/get/mycourse?userid="+userid, headers=hdr1)
+    b_data = res1.json()['data']
+    cool=""
+    for data in b_data:
+        FFF = "**BATCH-ID - BATCH NAME - INSTRUCTOR**"
+        aa = f" ```{data['id']}```      - **{data['course_name']}**\n\n"
+        # aa=f"**Batch Name -** {data['batchName']}\n**Batch ID -** ```{data['id']}```\n**By -** {data['instructorName']}\n\n"
+        if len(f'{cool}{aa}') > 4096:
+           print(aa)
+           cool = ""
+        cool += aa
+    await editable.edit(f'{"**You have these batches :-**"}\n\n{FFF}\n\n{cool}')
+    editable1=await m.reply_text("**Now send the Batch ID to Download** : ")
 
-    msg = f"You have {len(main_books)} main books:\n\n"
-    msg += "<b>BatchId - MainBookName - SubBooksIds</b>\n\n"
-    
-    for __id, book in main_books.items():
-        msg += f"**{__id} - {book['title']}**"
-        try:
-            msg += f" - {book['books']}\n"
-        except KeyError:
-            msg += "\n"
-        
+    sub_id_url="https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="
 
-    for __id, book in main_books.items():
-        name = book["title"]
-        pdf_title = f"{__id}. {name}"
-        # pdf_file = f"{u_path}/{pdf_title}.pdf"
-        # options.update({'title': pdf_title})
-        books_list = [str(__id)]
-        try:
-            books_list += book["books"].split(",")
-        except KeyError:
-            pass
-        # print(books_list)
-        # await m.reply_text(f'**{pdf_title}**\n')
-    x=await m.reply_text(msg)
-        # await m.reply_text(name)
-        #await m.reply_text(pdf_title)
-    # await m.reply_text("**Send resolution in which you want to download course :**")
-    # input2: Message = await bot.listen(editable.chat.id)
-    # raw_text1 = input2.text
-    
-    # await m.reply_text("**Send Batch id:**")
-    # input3: Message = await bot.listen(editable.chat.id)
-    # raw_text3 = input3.text
+    res2 = requests.get("https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="+editable1, headers=hdr1)
+    await m.reply_text(res2)
+    b_data1 = res2.json()['data']
+    await m.reply_text(b_data1)
+    SubiD=await m.reply_text("Enter the Subject Id Show in above Response")
+    Class_url = "https://rozgarapinew.teachx.in/get/alltopicfrmlivecourseclass?courseid=16&subjectid=25"
 
-    # editable4= await m.reply_text("Now send the **Thumb url**\nEg : ```https://telegra.ph/file/d9e24878bd4aba05049a1.jpg```\n\nor Send **no**")
-    # input6 = message = await bot.listen(editable.chat.id)
-    # raw_text6 = input6.text
+    res3 = requests.get("https://rozgarapinew.teachx.in/get/alltopicfrmlivecourseclass?courseid="+editable1,"&subjectid="+SubiD, headers=hdr1)
+    #print(res3)
+    b_data2 = res3.json()['data']
+    await m.reply_text(b_data2)
 
-    # thumb = input6.text
-    # if thumb.startswith("http://") or thumb.startswith("https://"):
-    #     getstatusoutput(f"wget '{thumb}' -O 'thumb.jpg'")
-    #     thumb = "thumb.jpg"
-    # else:
-    #     thumb == "no"
-        
-    xx =await m.reply_text("Genrating Course txt in this id")
-    count =1
-    try:
-        vv =""
-        
-        for book in books_dict:
-            _id = book["id"]
-            name = book["title"]
-            title = f"{_id}. {name}"
-            html_file = f"./htmls/{title}.html"
-            book_res = requests.get(utk_book_url.format(_id))
-            z = zipfile.ZipFile(io.BytesIO(book_res.content))
-            file_json = json.loads(z.read("json.txt"))
-            topics = {}
-            for i, topic in enumerate(file_json["chaptersList"]):
-                topic_name = topic["name"]
-                topics.update({i: {"name": topic_name, "videos": []}})
-                topic_res = file_json["jsonChapterDetails"][i]["defaultResources"]
-                if isinstance(topic_res, str):
-                    topic_res = topic_res.replace('\r\n', '').replace('\r', '')
-                    topic_res = re.sub(cleanr, "", topic_res)
-                    topic_res = eval(topic_res)
-                videos = []
-                
-                for res in topic_res:
-                    res_id = res["id"]
-                    res_type = res["resType"]
-                    res_name = unquote(res["resName"]).replace("+", " ").replace("'","_").replace('"', "_").replace("/","_")
-                    res_link = unquote(res["resLink"])
-                    res_player = res["videoPlayer"]
-                    if res_type == "Reference Videos":
-                        if res_player == "youtube":
-                            res_link = f"https://youtube.com/watch?v={res_link}"
-                        elif res_player == "custom":
-                            link_parts = res_link.split("/")
-                            if len(link_parts) != 5:
-                                res_link = f"https://youtube.com/watch?v={res_link}"
-                            else:
-                                res_id = res_link.split("/")[4].split("-")[0]
-                                res_link = f"http://cdn.jwplayer.com/manifests/{res_id}.m3u8"
-                    elif res_type == "Reference Web Links":
-                        pass
-                    else:
-                        continue
-                # print(res_name + ":" + res_link)
-                # await m.reply_text(res_name + ":" + res_link)
-                dd =f'{res_name}({topic_name}):{res_link}\n'
-                   
-                with open(f"file.txt", "w", encoding='utf-8') as f:
-                    vv+=dd 
-                    f.write(vv)
-                
-        await m.reply_document(f"file.txt",caption=msg)
-         
-        await xx.delete(True)
-
-
-            #     dd = f'**{res_name}**({topic_name}):```{res_link}```\n'
-            #     if len(f"{vv}{dd}")>4096:
-            #         await m.reply_text(dd)
-            #         vv = ""
-            #     vv+=dd  
-            # await m.reply_text(vv)
-    #         if "youtu" in res_link:
-    #             if raw_text1 in ["144", "240", "480"]:
-    #                 ytf = f'bestvideo[height<={raw_text1}][ext=mp4]+bestaudio[ext=m4a]'
-    #             elif raw_text1 == "360":
-    #                 ytf = 18
-    #             elif raw_text1 == "720":
-    #                 ytf = 22
-    #             else:
-    #                 ytf = 18
-    #         else:
-    #             ytf=f"bestvideo[height<={raw_text1}]"
-
-    #         if ytf == f'bestvideo[height<={raw_text1}][ext=mp4]+bestaudio[ext=m4a]':
-    #             cmd = f'yt-dlp -o "{res_name}.mp4" -f "{ytf}" "{res_link}"'
-    #         elif raw_text1 == "no":
-    #             cmd=f'yt-dlp -o "{res_name}.mp4" "{res_link}"'
-    #         elif "jwplayer" in res_link and raw_text1 in ["144", "240","360", "480","720","no"]:
-    #             cmd=f'yt-dlp -o "{res_name}.mp4" "{res_link}"'    
-    #         elif "google" in res_link and raw_text1 in ["144", "240","360", "480","720","no"]:
-    #             await m.reply_text(f'**{res_name}**\n\n```{res_link}```')
-    #         elif "upload/books" in res_link:
-    #             await m.reply_text("not a valid link")
-    #                 # elif f'{res_id}' in res_link:
-    #                 #     await m.reply_text(res_id)
-    #         else:
-    #             cmd = f'yt-dlp -o "{res_name}.mp4" -f "{ytf}+bestaudio" "{res_link}"'
-                    
-    #         print(res_link)
-            
-                
-    # #             cc = f"**Title** : {res_name}\n**Batch Title :** {topic_name}\n\n**Index - {count}**"
-    # #             show = f"**Downloading:-\n\n{res_name}\n\nLink:-** ```{res_link}```"
-    # #             prog = await m.reply_text(show)
-    # #                 # os.system(cmd)
-    # #             try:
-    # #                 download_cmd = f"{cmd} -R 25 --fragment-retries 25 --external-downloader aria2c --downloader-args 'aria2c: -x 16 -j 32'"
-    # #                 os.system(download_cmd)
-
-    # #                 filename = f"{res_name}.mp4"
-    # #                 subprocess.run(f'ffmpeg -i "{filename}" -ss 00:00:20 -vframes 1 "{filename}.jpg"', shell=True)
-    # #                 await prog.delete (True)
-
-    # #                 reply = await m.reply_text(f"Uploading Video - ```{res_name}```")
-
-    # #                 try:
-    # #                     if thumb == "no":
-    # #                        thumbnail = f"{filename}.jpg"
-    # #                     else:
-    # #                          thumbnail = thumb
-    # #                 except Exception as e:
-    # #                     await m.reply_text(str(e))
-
-    # #                 dur = int(helper.duration(filename))
-    # #                 start_time = time.time()
-    # #                 await m.reply_video(f"{res_name}.mp4",caption=cc, supports_streaming=True,height=720,width=1280,thumb=thumbnail,duration=dur, progress=progress_bar,progress_args=(reply,start_time))
-    # #                 count+=1
-    # #                 os.remove(f"{res_name}.mp4")
-    # #                 os.remove(f"{filename}.jpg")
-    # #                 await reply.delete (True)
-
-    # #             except Exception as e:
-    # #                 await m.reply_text(f'**Video downloading failed\nor not a valid video link** ❌\n**Name :** {res_name}\n\n**Link :** ```{res_link}```\n\n{e}')
-    # #                 continue
-    # #                 time.sleep(1)
-    except Exception as e:   
-        await m.reply_text(f'{e}')     
     await m.reply_text('Done')   
 
 
