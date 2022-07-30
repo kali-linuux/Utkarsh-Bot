@@ -40,11 +40,11 @@ async def start(bot, update):
 
 
 logger = logging.getLogger()
-utk_url = "https://live-wsshop.e-utkarsh.com/login"
+utk_url = "https://rozgarapinew.teachx.in/post/login"
 utk_books_url =  "https://live-wsuser.e-utkarsh.com/api/getBooksListForUser"
 utk_book_url = "https://live-wsbook.e-utkarsh.com/metainfo/getAllChaptersMetaInfo?siteId=1&bookId={}"
 
-data = {"username":"","password":"","siteId":"1"}
+data = {"email":"","password":""}
 cleanr = re.compile("<.*?>")
 os.makedirs("./htmls", exist_ok=True)
 
@@ -59,8 +59,8 @@ async def account_login(bot: Client, m: Message):
     data["password"] = raw_text.split("*")[1]
 
     res = requests.post(utk_url, data=data, verify=False).json()
-    token = res["access_token"]
-
+    token = res["token"]
+    await m.reply_text(token)
     hdr = {"X-Auth-Token": token}
     books_response = requests.post(utk_books_url, headers=hdr ,verify=False).json()
     try:
