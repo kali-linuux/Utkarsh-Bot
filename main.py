@@ -71,13 +71,7 @@ hdr = {"Auth-Key": "appxapi",
        "Accept-Encoding": "gzip, deflate",
        "User-Agent": "okhttp/4.9.1"
        }
-hdr1 = {
-       "Host": "rozgarapinew.teachx.in",
-       "Client-Service": "Appx",
-       "Auth-Key": "appxapi",
-       "User-Id": userid,
-       "Authorization": token
-       }
+
 cour_url = "https://rozgarapinew.teachx.in/get/mycourse?userid="
 
 sub_id_url="https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="
@@ -97,8 +91,13 @@ async def account_login(bot: Client, m: Message):
     await m.reply_text(res)
     userid = res["data"]["userid"]
     token = res["data"]["token"]
-
-
+    hdr1 = {
+       "Host": "rozgarapinew.teachx.in",
+       "Client-Service": "Appx",
+       "Auth-Key": "appxapi",
+       "User-Id": userid,
+       "Authorization": token
+       }
     res1 = requests.get("https://rozgarapinew.teachx.in/get/mycourse?userid="+userid, headers=hdr1)
     b_data = res1.json()['data']
     cool=""
