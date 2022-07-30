@@ -57,8 +57,6 @@ hdr = {"Auth-Key": "appxapi",
 
 data = {"email": "", "password": ""}
 res = requests.post(rwa_url, data=data, headers=hdr).json(
-cleanr = re.compile("<.*?>")
-os.makedirs("./htmls", exist_ok=True)
 
 @bot.on_message(filters.command(["login"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
