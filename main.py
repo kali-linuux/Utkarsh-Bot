@@ -94,8 +94,7 @@ async def account_login(bot: Client, m: Message):
     data["password"] = raw_text.split("*")[1]
 
     res = requests.post("https://rozgarapinew.teachx.in/post/login", data=data, headers=hdr).json()
-    for data res:
-    await m.reply_text(data)
+    await m.reply_text(res)
     userid = res["data"]["userid"]
     token = res["data"]["token"]
 
