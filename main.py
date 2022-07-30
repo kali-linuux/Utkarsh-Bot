@@ -76,7 +76,7 @@ cour_url = "https://rozgarapinew.teachx.in/get/mycourse?userid="
 
 sub_id_url="https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="
 
-data = {"email": "", "password": ""}
+data = {"email": "731881682", "password": "123456"}
 
 @bot.on_message(filters.command(["login"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
@@ -86,7 +86,18 @@ async def account_login(bot: Client, m: Message):
     raw_text = input1.text
     data["email"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
-
+    
+    hdr = {
+           "Auth-Key": "appxapi",
+           "User-Id": "-2",
+           "Authorization": "",
+           "User_app_category": "",
+           "Language": "en",
+           "Content-Type": "application/x-www-form-urlencoded",
+           "Content-Length": "227",
+           "Accept-Encoding": "gzip, deflate",
+           "User-Agent": "okhttp/4.9.1"
+           }
     res = requests.post("https://rozgarapinew.teachx.in/post/login", data=data, headers=hdr).json()
     await m.reply_text(res)
     userid = res["data"]["userid"]
