@@ -40,8 +40,8 @@ async def start(bot, update):
 
 
 logger = logging.getLogger()
-utk_url = "https://rozgarapinew.teachx.in/post/login"
-utk_books_url =  "https://live-wsuser.e-utkarsh.com/api/getBooksListForUser"
+rwa_url = "https://rozgarapinew.teachx.in/post/login"
+cour_url =  "https://rozgarapinew.teachx.in/get/mycourse?userid="
 utk_book_url = "https://live-wsbook.e-utkarsh.com/metainfo/getAllChaptersMetaInfo?siteId=1&bookId={}"
 
 data = {"email":"","password":""}
@@ -58,15 +58,17 @@ async def account_login(bot: Client, m: Message):
     data["username"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
 
-    res = requests.post(utk_url, data=data).json()
+    res = requests.post(rwa_url, data=data).json()
     for data res:
     await m.reply_text(data)
+    userid = res["data"]["userid"]
     token = res["data"]["token"]
-    await m.reply_text(token)
-    hdr = {"X-Auth-Token": token}
-    books_response = requests.post(utk_books_url, headers=hdr).json()
+    print(userid)
+    print(token)
+    hdr = {"Authorization": token,User-Id: userid}
+    mycourse_response = requests.post(cour_url+"userid", headers=hdr).json()
     try:
-        books_dict = json.loads(books_response["books"])
+        books_dict = json.loads(mycourse_response["data"])
     except:
         exit()
 
