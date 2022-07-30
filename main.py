@@ -58,11 +58,11 @@ async def account_login(bot: Client, m: Message):
     data["username"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
 
-    res = requests.post(utk_url, data=data).json()
+    res = requests.post(utk_url, data=data, verify=False).json()
     token = res["access_token"]
 
     hdr = {"X-Auth-Token": token}
-    books_response = requests.post(utk_books_url, headers=hdr).json()
+    books_response = requests.post(utk_books_url, headers=hdr ,verify=False).json()
     try:
         books_dict = json.loads(books_response["books"])
     except:
