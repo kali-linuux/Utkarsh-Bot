@@ -1,3 +1,4 @@
+
 import requests
 import json
 import subprocess
@@ -10,11 +11,13 @@ import pyrogram
 from pyrogram import Client, filters
 import time
 from pyrogram.types import User, Message
-from subprocess import getstatusoutput
 from p_bar import progress_bar
 import time
 from subprocess import getstatusoutput
 import logging
+import os
+import re
+import simplejson
 
 
 
@@ -30,21 +33,19 @@ from urllib.parse import unquote
 #     bot_token=bot_token)
 
 
-bot = Client(
-    "Utkarsh",
-    bot_token=os.environ.get("BOT_TOKEN"),
-    api_id=int(os.environ.get("API_ID")),
-    api_hash=os.environ.get("API_HASH")
-)
+
+bot = Client("CW", bot_token=os.environ.get("BOT_TOKEN"), api_id=int(os.environ.get("API_ID")), api_hash=os.environ.get("API_HASH"))
+
+logger = logging.getLogger()
+
+
 @bot.on_message(filters.command(["start"]))
-async def start(bot, update):
-       await update.reply_text("Hi i am **Utkarsh Downloader**.\n\n"
-                              "**NOW:-** "
-                                       
-                                       "Press **/login** to continue..\n\n"
-                                     "Bot made by **DRAGO**" )
+ async def start(bot, update):
+    await update.reply_text("𝕳𝖎 𝖎 𝖆𝖒 **𝕮𝖆𝖗𝖊𝖊𝖗𝖜𝖎𝖑𝖑 𝕯𝖔𝖜𝖓𝖑𝖔𝖆𝖉𝖊𝖗**.\n\n"
+                            "**𝒩𝒪𝒲:-̄** "
 
-
+                            "ℙ𝕣𝕖𝕤𝕤 **/login** 𝕥𝕠 𝕔𝕠𝕟𝕥𝕚𝕟𝕦𝕖..\n\n"
+                            "Bᴏᴛ ᴍᴀᴅᴇ ʙʏ ** BʟᴀᴄᴋOᴜT **")
 
 logger = logging.getLogger()
 rwa_url = "https://rozgarapinew.teachx.in/post/login"
