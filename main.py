@@ -1,3 +1,24 @@
+#  MIT License
+#
+#  Copyright (c) 2019-present Dan <https://github.com/delivrance>
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy
+#  of this software and associated documentation files (the "Software"), to deal
+#  in the Software without restriction, including without limitation the rights
+#  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#  copies of the Software, and to permit persons to whom the Software is
+#  furnished to do so, subject to the following conditions:
+#
+#  The above copyright notice and this permission notice shall be included in all
+#  copies or substantial portions of the Software.
+#
+#  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+#  SOFTWARE
 
 import requests
 import json
@@ -38,9 +59,7 @@ bot = Client("CW", bot_token=os.environ.get("BOT_TOKEN"), api_id=int(os.environ.
 
 logger = logging.getLogger()
 
-@bot.on_message(filters.command(["start"]))
-
-rwa_url = "https://rozgarapinew.teachx.in/post/login"
+#rwa_url="https://rozgarapinew.teachx.in/post/login"
 
 hdr = {"Auth-Key": "appxapi",
        "User-Id": "-2",
@@ -52,32 +71,34 @@ hdr = {"Auth-Key": "appxapi",
        "Accept-Encoding": "gzip, deflate",
        "User-Agent": "okhttp/4.9.1"
        }
+hdr1 = {
+       "Host": "rozgarapinew.teachx.in",
+       "Client-Service": "Appx",
+       "Auth-Key": "appxapi",
+       "User-Id": userid,
+       "Authorization": token
+       }
+cour_url = "https://rozgarapinew.teachx.in/get/mycourse?userid="
+
+sub_id_url="https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="
 
 data = {"email": "", "password": ""}
-res = requests.post(rwa_url, data=data, headers=hdr).json(
 
 @bot.on_message(filters.command(["login"])& ~filters.edited)
 async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text("Send **ID & Password** in this manner otherwise bot will not respond.\n\nSend like this:-  **ID*Password**"
-    )
+    editable = await m.reply_text("Send **ID & Password** in this manner otherwise bot will not respond.\n\nSend like this:-  **ID*Password**")
     
     input1: Message = await bot.listen(editable.chat.id)
     raw_text = input1.text
     data["email"] = raw_text.split("*")[0]
     data["password"] = raw_text.split("*")[1]
 
-    res = requests.post(rwa_url, data=data, headers=hdr).json()
+    res = requests.post(https://rozgarapinew.teachx.in/post/login, data=data, headers=hdr).json()
     for data res:
     await m.reply_text(data)
     userid = res["data"]["userid"]
     token = res["data"]["token"]
-    hdr1 = {
-           "Host": "rozgarapinew.teachx.in",
-           "Client-Service": "Appx",
-           "Auth-Key": "appxapi",
-           "User-Id": userid,
-           "Authorization": token
-           }cour_url = "https://rozgarapinew.teachx.in/get/mycourse?userid="
+
 
     res1 = requests.get("https://rozgarapinew.teachx.in/get/mycourse?userid="+userid, headers=hdr1)
     b_data = res1.json()['data']
@@ -93,7 +114,6 @@ async def account_login(bot: Client, m: Message):
     await editable.edit(f'{"**You have these batches :-**"}\n\n{FFF}\n\n{cool}')
     editable1=await m.reply_text("**Now send the Batch ID to Download** : ")
 
-    sub_id_url="https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="
 
     res2 = requests.get("https://rozgarapinew.teachx.in/get/allsubjectfrmlivecourseclass?courseid="+editable1, headers=hdr1)
     await m.reply_text(res2)
@@ -109,9 +129,7 @@ async def account_login(bot: Client, m: Message):
 
     await m.reply_text('Done')   
 
-
-
-bot.run()           
+       
             
 
 
